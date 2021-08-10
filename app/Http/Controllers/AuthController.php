@@ -42,7 +42,6 @@ class AuthController extends Controller
             ], 201);
         }
 
-
         // $validatedData['password'] = Hash::make($request->password);
         
         $data = [
@@ -59,6 +58,8 @@ class AuthController extends Controller
             'email'=> $request->email,
             'password'=> Hash::make($request->password)
         ]);
+
+        $register->assignRole('user');
 
         if ($register) {
             return response()->json([
@@ -86,7 +87,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Email atau password salah.'], 401);
         }
 
         return $this->respondWithToken($token);
